@@ -1,38 +1,25 @@
-const Gameboard = (function() {
-    function Gameboard() {
-        this.board = [
-            ["", "", ""],
-            ["", "", ""],
-            ["", "", ""]
-        ];
-        
-        this.reset = function() {
-            this.board = [
-                ["", "", ""],
-                ["", "", ""],
-                ["", "", ""]
-            ];
-        };
-        
-        this.placeMarker = function(x, y, marker) {
-            this.board[x][y] = marker;
-        };
+function Gameboard() {
+    this.board = [
+        ["", "", ""],
+        ["", "", ""],
+        ["", "", ""]
+    ]
+    
+}
+function Player(name, marker) {
+    this.name = name
+    this.marker = marker
+    this.placeMarker = (x, y, gameboard) => {
+        gameboard[x][y] = this.marker;
+        function checkForWin() {
+            
+        }
+        return gameboard
     }
     
-    return Gameboard;
-})();
-
-const Player = function(name, marker) {
-    this.name = name;
-    this.marker = marker;
-};
-
-
+}
+Object.setPrototypeOf(Player, Gameboard);
 const gameboard = new Gameboard();
-console.log(gameboard);
-
 const player1 = new Player("John", "X");
-const player2 = new Player("Mark", "O");
+const player2 = new Player("Mike", "O");
 
-gameboard.placeMarker(0, 0, player1.marker);
-gameboard.placeMarker(0, 1, player2.marker);
