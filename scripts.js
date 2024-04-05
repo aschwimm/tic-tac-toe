@@ -1,4 +1,18 @@
 // Gameboard constructor creates a 2d array of empty strings to represent a 3x3 grid
+document.addEventListener("DOMContentLoaded", () => {
+    
+    
+    const gameboard = new Gameboard();
+    gameboard.board.forEach(row => {
+        row.forEach(square => {
+            const container = document.getElementById("container");
+            const gridSquare = document.createElement("div");
+            gridSquare.classList.add("grid-square");
+            
+            container.append(gridSquare)
+        })
+    })
+})
 function Gameboard() {
     this.board = [
         ["", "", ""],
@@ -10,9 +24,9 @@ function Gameboard() {
 function checkWin(gameboard, marker, name) {
     // Iterate through each row in the array, if every element in the array in each row matches the marker, indicates a row win
     for(const row of gameboard) {
-        console.log(row)
         if(row.every(value => value === marker)) {
             console.log(`${name} wins!`);
+            return
         }
     }
     for (let i = 0; i < gameboard.length; i++) {
@@ -21,6 +35,7 @@ function checkWin(gameboard, marker, name) {
         // .every method is used to check if the new column array is filled with the player's marker
         if (column.every(value => value === marker)) {
             console.log(`${name} wins!`);
+            return
         }
     }
     // A player must have a marker in the middle of the grid at [1][1] for a diagonal win to be possible
@@ -28,10 +43,18 @@ function checkWin(gameboard, marker, name) {
     if(gameboard[1][1] === marker) {
         if(gameboard[0][0] === marker && gameboard[2][2] === marker) {
             console.log(`${name} wins!`);
+            return
         }
         else if (gameboard[0][2] === marker && gameboard[2][0] === marker) {
             console.log(`${name} wins!`);
+            return
         }
+    }
+    // If there are no empty strings indicating an unoccupied spot on the gameboard and a winner hasn't been declared
+    // then there must be a tie
+    if (!(gameboard.some(row => row.some(value => value === "")))) {
+        console.log("Tie!")
+        return;
     }
     
 }
