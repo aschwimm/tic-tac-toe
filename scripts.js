@@ -1,24 +1,39 @@
 // Gameboard constructor creates a 2d array of empty strings to represent a 3x3 grid
-document.addEventListener("DOMContentLoaded", () => {
-    
-    
-    const gameboard = new Gameboard();
-    gameboard.board.forEach(row => {
-        row.forEach(square => {
-            const container = document.getElementById("container");
-            const gridSquare = document.createElement("div");
-            gridSquare.classList.add("grid-square");
-            
-            container.append(gridSquare)
-        })
-    })
-})
+document.addEventListener("DOMContentLoaded", initGame);
 function Gameboard() {
     this.board = [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""]
     ]
+    
+}
+function initGame() {
+    const gameboard = new Gameboard();
+    const players = {}
+    gameboard.board.forEach(row => {
+        row.forEach(() => {
+            const container = document.getElementById("grid-container");
+            const gridSquare = document.createElement("div");
+            gridSquare.classList.add("grid-square");
+            // gridSquare.addEventListener("click", () => {
+            //     gridSquare.innerHTML = 
+            // })
+            container.append(gridSquare)
+        })
+    })
+    const menuForm = document.getElementById("menu-form");
+    for(const element of menuForm) {
+        element.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+            event.preventDefault();
+            const player = new Player(element.value, element.id);
+            players[element.name] = player;
+            console.log(players)
+            }
+        });
+    }
+    return players;
     
 }
 function checkWin(gameboard, marker, name) {
@@ -72,7 +87,7 @@ function Player(name, marker) {
     }
 }
 Object.setPrototypeOf(Player, Gameboard);
-const gameboard = new Gameboard();
+
 const player1 = new Player("John", "X");
 const player2 = new Player("Mike", "O");
 
