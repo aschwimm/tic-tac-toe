@@ -1,5 +1,4 @@
 // Gameboard constructor creates a 2d array of empty strings to represent a 3x3 grid
-document.addEventListener("DOMContentLoaded", initGame);
 function Gameboard() {
     this.board = [
         ["", "", ""],
@@ -8,33 +7,43 @@ function Gameboard() {
     ]
     
 }
-function initGame() {
+
+function playerSelection() {
+    const menuForm = document.getElementById("menu-form");
+    const player1 = new Player(menuForm.player1.value, menuForm.player1.id);
+    const player2 = new Player(menuForm.player2.value, menuForm.player2.id);
+    return {player1, player2};
+}
+const initGame = (function() {
+    const playButton = document.getElementById("play-game");
+    playButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        const players = playerSelection();
+        console.log(players);
+    });
+    console.log(players);
+    const container = document.getElementById("grid-container");
     const gameboard = new Gameboard();
-    const players = {}
-    gameboard.board.forEach(row => {
-        row.forEach(() => {
-            const container = document.getElementById("grid-container");
+    for(let i = 0; i < gameboard.board.length; i++ ) {
+        for(let j = 0; j < gameboard.board[i].length; j++) {
+            const square = new Square();
             const gridSquare = document.createElement("div");
             gridSquare.classList.add("grid-square");
-            // gridSquare.addEventListener("click", () => {
-            //     gridSquare.innerHTML = 
-            // })
-            container.append(gridSquare)
-        })
-    })
-    const menuForm = document.getElementById("menu-form");
-    for(const element of menuForm) {
-        element.addEventListener("keypress", (event) => {
-            if (event.key === "Enter") {
-            event.preventDefault();
-            const player = new Player(element.value, element.id);
-            players[element.name] = player;
-            console.log(players)
-            }
-        });
+            square.x = i;
+            square.y = j;
+            square.element = gridSquare;
+            container.append(gridSquare);
+            square.element.addEventListener("click", ()=> {
+                player1.placeMarker(square.x, square.y, gameboard.board);
+                square.element.innerHTML = player1.marker;
+            })
+        }
     }
-    return players;
-    
+})();
+function Square(x, y, element) {
+    this.x = x;
+    this.y = y;
+    this.element = element
 }
 function checkWin(gameboard, marker, name) {
     // Iterate through each row in the array, if every element in the array in each row matches the marker, indicates a row win
@@ -74,20 +83,23 @@ function checkWin(gameboard, marker, name) {
     
 }
 function Player(name, marker) {
-    this.name = name
-    this.marker = marker
+    this.name = name;
+    this.marker = marker;
+    this.turn = true;
     this.placeMarker = (x, y, gameboard) => {
-        if(gameboard[x][y] === "") {
-            gameboard[x][y] = this.marker;
-            checkWin(gameboard, this.marker, this.name);
+        if(this.turn) {
+            if(gameboard[x][y] === "") {
+                gameboard[x][y] = this.marker;
+                // this.turn = false;
+                checkWin(gameboard, this.marker, this.name);
+            } else {
+                console.log("space is occupied");
+                return;
+            }
         } else {
-            console.log("space is occupied");
-            return;
+            console.log(`not ${this.name}'s turn`)
         }
     }
 }
-Object.setPrototypeOf(Player, Gameboard);
 
-const player1 = new Player("John", "X");
-const player2 = new Player("Mike", "O");
 
