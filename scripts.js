@@ -26,6 +26,14 @@ const game = {
     }
     
 }
+function checkWin(player) {
+    
+    for(const row of game.gameboard) {
+        if(row.every((value) => value === player.marker)) {
+            console.log(`${player.name} wins!`);
+        }
+    }
+}
 const playerNameListener = (function(){
     const nameForm = document.getElementById("player-name-form");
     for(const input of nameForm) {
@@ -46,13 +54,17 @@ const drawGrid = (function() {
             gridElement.classList.add("grid-square");
             gridElement.addEventListener("click", () => {
                 if (game.players[0].turn) {
-                    game.gameboard[gridSquare.x][gridSquare.y] = game.players[0].marker;
-                    game.players[0].turn = false;
+                    const marker = game.players[0].marker;
+                    game.gameboard[gridSquare.x][gridSquare.y] = marker
                     game.players[1].turn = true;
+                    game.players[0].turn = false;
+                    checkWin(game.players[0]);
                 } else {
-                    game.gameboard[gridSquare.x][gridSquare.y] = game.players[1].marker;
+                    const marker = game.players[1].marker;
+                    game.gameboard[gridSquare.x][gridSquare.y] = marker;
                     game.players[1].turn = false;
                     game.players[0].turn = true;
+                    checkWin(game.players[1]);
                 }
             });
             const gridSquare = new GridSquare(i, j, gridElement);
