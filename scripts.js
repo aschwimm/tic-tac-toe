@@ -27,12 +27,30 @@ const game = {
     
 }
 function checkWin(player) {
-    
-    for(const row of game.gameboard) {
-        if(row.every((value) => value === player.marker)) {
-            console.log(`${player.name} wins!`);
+    if(game.gameboard[1][1] === player.marker) {
+        if(game.gameboard[0][0] === player.marker && game.gameboard[2][2] === player.marker) {
+            console.log(`Diagonal victory! ${player.name} wins!`)
+            return
+        }
+        else if(game.gameboard[0][2] === player.marker && game.gameboard[2][0] === player.marker) {
+            console.log(`Diagonal victory! ${player.name} wins!`)
+            return
         }
     }
+    for(const row of game.gameboard) {
+        if(row.every((value) => value === player.marker)) {
+            console.log(`Horizontal victory! ${player.name} wins!`);
+            return
+        }
+    }
+    for(let i = 0; i < game.gameboard.length; i++) {
+        const column = game.gameboard.map((row) => row[i])
+        if(column.every((value) => value === player.marker)) {
+            console.log(`Vertical victory! ${player.name} wins!`)
+            return
+        }
+    }
+    
 }
 const playerNameListener = (function(){
     const nameForm = document.getElementById("player-name-form");
