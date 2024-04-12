@@ -8,6 +8,7 @@ function Gameboard() {
 function Player(name, marker) {
     this.name = name;
     this.marker = marker;
+    this.color = "";
     this.turn = false;
 }
 function turnRandomizer() {
@@ -58,7 +59,9 @@ const playerNameListener = (function(){
         input.addEventListener("keypress", (event) => {
             if(event.key === "Enter") {
                 const player = new Player(input.value, input.name);
+                player.color = input.id;
                 game.players.push(player);
+                
                 input.value = "";
             }
         })
@@ -76,12 +79,16 @@ const drawGrid = (function() {
                     game.gameboard[gridSquare.x][gridSquare.y] = marker
                     game.players[1].turn = true;
                     game.players[0].turn = false;
+                    gridSquare.square.innerHTML = marker;
+                    gridSquare.square.style.color = game.players[0].color;
                     checkWin(game.players[0]);
                 } else {
                     const marker = game.players[1].marker;
                     game.gameboard[gridSquare.x][gridSquare.y] = marker;
                     game.players[1].turn = false;
                     game.players[0].turn = true;
+                    gridSquare.square.innerHTML = marker;
+                    gridSquare.square.style.color = game.players[1].color;
                     checkWin(game.players[1]);
                 }
             });
