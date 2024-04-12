@@ -68,28 +68,42 @@ const playerNameListener = (function(){
     }
 })();
 const drawGrid = (function() {
+    
     const container = document.getElementById("container");
     for(let i = 0; i < game.gameboard.length; i++ ){
         for(let j = 0; j < game.gameboard[0].length; j++) {
             const gridElement = document.createElement("div");
             gridElement.classList.add("grid-square");
             gridElement.addEventListener("click", () => {
+                if(game.players.length < 2){
+                    return;
+                }
                 if (game.players[0].turn) {
                     const marker = game.players[0].marker;
-                    game.gameboard[gridSquare.x][gridSquare.y] = marker
-                    game.players[1].turn = true;
-                    game.players[0].turn = false;
-                    gridSquare.square.innerHTML = marker;
-                    gridSquare.square.style.color = game.players[0].color;
-                    checkWin(game.players[0]);
+                    if(game.gameboard[gridSquare.x][gridSquare.y] === ""){
+                        game.gameboard[gridSquare.x][gridSquare.y] = marker
+                        game.players[1].turn = true;
+                        game.players[0].turn = false;
+                        gridSquare.square.innerHTML = marker;
+                        gridSquare.square.style.color = game.players[0].color;
+                        checkWin(game.players[0]);
+                    } else {
+                        return console.log("space-occupied");
+                    }
+                    
                 } else {
-                    const marker = game.players[1].marker;
-                    game.gameboard[gridSquare.x][gridSquare.y] = marker;
-                    game.players[1].turn = false;
-                    game.players[0].turn = true;
-                    gridSquare.square.innerHTML = marker;
-                    gridSquare.square.style.color = game.players[1].color;
-                    checkWin(game.players[1]);
+                    if(game.gameboard[gridSquare.x][gridSquare.y] === "") {
+                        const marker = game.players[1].marker;
+                        game.gameboard[gridSquare.x][gridSquare.y] = marker;
+                        game.players[1].turn = false;
+                        game.players[0].turn = true;
+                        gridSquare.square.innerHTML = marker;
+                        gridSquare.square.style.color = game.players[1].color;
+                        checkWin(game.players[1]);
+                    } else {
+                        return console.log("space-occupied")
+                    }
+                    
                 }
             });
             const gridSquare = new GridSquare(i, j, gridElement);
